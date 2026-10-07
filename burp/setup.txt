@@ -1,0 +1,32 @@
+POST /api/auth/init HTTP/1.1
+Host: 192.168.122.161:8787
+Content-Length: 24
+Accept-Language: en-US,en;q=0.9
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36
+Content-Type: application/json
+Accept: */*
+Origin: http://192.168.122.161:8787
+Referer: http://192.168.122.161:8787/setup/
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+
+{"password":"artxploit"}
+
+---
+
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: Content-Type
+Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS
+Access-Control-Allow-Origin: *
+Content-Type: application/json
+Date: Wed, 07 Oct 2026 06:42:56 GMT
+Content-Length: 160
+
+{"token":"ey....ey..."}
+
+---
+
+GET /... HTTP/1.1
+...
+Cookie: artex_token=ey....ey...
+...

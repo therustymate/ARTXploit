@@ -1,0 +1,144 @@
+{
+    "commandline": "ffuf -u http://192.168.122.161:8787/api/auth/FUZZ -w /home/rusty/Downloads/wdlist01.txt -mc 200,201,204,301,302,307,401,403,405 -o /home/rusty/Documents/ARTXploit/dump/api_auth_FUZZ.json",
+    "time": "2026-10-07T19:22:46+13:00",
+    "results": [
+        {
+            "input": {
+                "FFUFHASH": "924f03b1",
+                "FUZZ": "init"
+            },
+            "position": 945,
+            "status": 405,
+            "length": 19,
+            "words": 3,
+            "lines": 2,
+            "content-type": "text/plain; charset=utf-8",
+            "redirectlocation": "",
+            "scraper": {},
+            "duration": 699650,
+            "resultfile": "",
+            "url": "http://192.168.122.161:8787/api/auth/init",
+            "host": "192.168.122.161:8787"
+        },
+        {
+            "input": {
+                "FFUFHASH": "924f0441",
+                "FUZZ": "login"
+            },
+            "position": 1089,
+            "status": 405,
+            "length": 19,
+            "words": 3,
+            "lines": 2,
+            "content-type": "text/plain; charset=utf-8",
+            "redirectlocation": "",
+            "scraper": {},
+            "duration": 556511,
+            "resultfile": "",
+            "url": "http://192.168.122.161:8787/api/auth/login",
+            "host": "192.168.122.161:8787"
+        },
+        {
+            "input": {
+                "FFUFHASH": "924f06d7",
+                "FUZZ": "status"
+            },
+            "position": 1751,
+            "status": 200,
+            "length": 21,
+            "words": 1,
+            "lines": 2,
+            "content-type": "application/json",
+            "redirectlocation": "",
+            "scraper": {},
+            "duration": 1257487,
+            "resultfile": "",
+            "url": "http://192.168.122.161:8787/api/auth/status",
+            "host": "192.168.122.161:8787"
+        }
+    ],
+    "config": {
+        "autocalibration": false,
+        "autocalibration_keyword": "FUZZ",
+        "autocalibration_perhost": false,
+        "autocalibration_strategies": [
+            "basic"
+        ],
+        "autocalibration_strings": [],
+        "colors": false,
+        "cmdline": "ffuf -u http://192.168.122.161:8787/api/auth/FUZZ -w /home/rusty/Downloads/wdlist01.txt -mc 200,201,204,301,302,307,401,403,405 -o /home/rusty/Documents/ARTXploit/dump/api_auth_FUZZ.json",
+        "configfile": "",
+        "postdata": "",
+        "debuglog": "",
+        "delay": {
+            "value": "0.00"
+        },
+        "dirsearch_compatibility": false,
+        "encoders": [],
+        "extensions": [],
+        "fmode": "or",
+        "follow_redirects": false,
+        "headers": {},
+        "ignorebody": false,
+        "ignore_wordlist_comments": false,
+        "inputmode": "clusterbomb",
+        "cmd_inputnum": 100,
+        "inputproviders": [
+            {
+                "name": "wordlist",
+                "keyword": "FUZZ",
+                "value": "/home/rusty/Downloads/wdlist01.txt",
+                "encoders": "",
+                "template": ""
+            }
+        ],
+        "inputshell": "",
+        "json": false,
+        "matchers": {
+            "IsCalibrated": false,
+            "Mutex": {},
+            "Matchers": {
+                "status": {
+                    "value": "200,201,204,301,302,307,401,403,405"
+                }
+            },
+            "Filters": {},
+            "PerDomainFilters": {}
+        },
+        "mmode": "or",
+        "maxtime": 0,
+        "maxtime_job": 0,
+        "method": "GET",
+        "noninteractive": false,
+        "outputdirectory": "",
+        "outputfile": "/home/rusty/Documents/ARTXploit/dump/api_auth_FUZZ.json",
+        "outputformat": "json",
+        "OutputSkipEmptyFile": false,
+        "proxyurl": "",
+        "quiet": false,
+        "rate": 0,
+        "raw": false,
+        "recursion": false,
+        "recursion_depth": 0,
+        "recursion_strategy": "default",
+        "replayproxyurl": "",
+        "requestfile": "",
+        "requestproto": "https",
+        "scraperfile": "",
+        "scrapers": "all",
+        "sni": "",
+        "stop_403": false,
+        "stop_all": false,
+        "stop_errors": false,
+        "threads": 40,
+        "timeout": 10,
+        "url": "http://192.168.122.161:8787/api/auth/FUZZ",
+        "verbose": false,
+        "wordlists": [
+            "/home/rusty/Downloads/wdlist01.txt"
+        ],
+        "http2": false,
+        "client-cert": "",
+        "client-key": ""
+    }
+}

@@ -1,0 +1,19 @@
+$ python3 ./scripts/dos_request.py -t http://192.168.122.161:8787 -n 10000 -c 10000000 --timeout 100
+[+] Target      : http://192.168.122.161:8787/api/auth/status
+[+] Requests    : 10000
+[+] Concurrency : 10000000
+
+=== Result ===
+Wall time       : 22.926s
+Req/s           : 436.19
+Failures        : 0
+Status codes    : {200: 10000}
+Latency avg     : 896.8 ms
+Latency p50     : 72.1 ms
+Latency p95     : 4054.5 ms
+Latency max     : 18484.8 ms
+
+initialized:
+  true          : 9990
+  false         : 10
+  unknown       : 0
