@@ -41,9 +41,9 @@ Exploit Development &amp; Research for Autumn-27/ARTEX
 
 | Setup Page | Dashboard |
 |-|-|
-| ![Setup](./screenshots/Screenshot%20From%202026-10-07%2018-07-27.png) | ![Dashboard](./screenshots/Screenshot%20From%202026-10-07%2018-10-28.png) |
+| ![Setup](./rsrc/screenshots/Screenshot%20From%202026-10-07%2018-07-27.png) | ![Dashboard](./rsrc/screenshots/Screenshot%20From%202026-10-07%2018-10-28.png) |
 
-![Console](./screenshots/Screenshot%20From%202026-10-07%2018-11-18.png)
+![Console](./rsrc/screenshots/Screenshot%20From%202026-10-07%2018-11-18.png)
 
 * Commit: [b55ceb1fdd84a813d77de09a06af83d323a81f85](https://github.com/Autumn-27/ARTEX/tree/b55ceb1fdd84a813d77de09a06af83d323a81f85)
 * Release: [v0.3.14](https://github.com/Autumn-27/ARTEX/releases/tag/v0.3.14)
