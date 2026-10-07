@@ -50,7 +50,7 @@ Exploit Development &amp; Research for Autumn-27/ARTEX
 
 ## Exploit Usage
 ```bash
-
+python3 artxploit.py -t [TARGET] -p [NEW_PASSWORD]
 ```
 
 ## References
