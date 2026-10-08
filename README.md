@@ -2,7 +2,11 @@
 Exploit Development &amp; Research for Autumn-27/ARTEX
 
 ## Executive Summary
+By continuously sending requests to `/api/auth/status` until all PostgreSQL `max_connections` slots (100 sessions by default) are exhausted, `auth.go` in ARTEX v0.3.14 fails to establish a connection to the database. However, instead of treating the database connection failure as an error, the application incorrectly assumes that no password has been configured. It then accepts a new password and attempts to store it in the database, resulting in a TOCTOU (Time-of-Check to Time-of-Use) vulnerability.
 
+The exploit chains this vulnerability with `/api/tools/custom/test`, ultimately achieving successful RCE (Remote Code Execution).
+
+This vulnerability was explicitly fixed in a subsequent commit. When ARTEX is built using the updated code, the exploit no longer works.
 
 ## Exploit Reproduction Environment
 | Field             | Value                                                     |
