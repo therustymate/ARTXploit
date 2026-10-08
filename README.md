@@ -1,12 +1,16 @@
 # ARTXploit
 ARTEX v0.3.14 Pre-auth Remote Code Execution via TOCTOU Race Condition
 
+[![ARTXploit RCE Demonstration](https://img.youtube.com/vi/B8b5uQMeL4U/maxresdefault.jpg)](https://www.youtube.com/watch?v=B8b5uQMeL4U)
+
 ## Executive Summary
 By continuously sending requests to `/api/auth/status` until all PostgreSQL `max_connections` slots (100 sessions by default) are exhausted, `auth.go` in ARTEX v0.3.14 fails to establish a connection to the database. However, instead of treating the database connection failure as an error, the application incorrectly assumes that no password has been configured. It then accepts a new password and attempts to store it in the database, resulting in a TOCTOU (Time-of-Check to Time-of-Use) vulnerability.
 
 The exploit chains this vulnerability with `/api/tools/custom/test`, ultimately achieving successful RCE (Remote Code Execution).
 
 This vulnerability was explicitly fixed in a subsequent commit. When ARTEX is built using the updated code, the exploit no longer works.
+
+This exploit is highly sensitive to timing, client-side hardware performance, and target server performance. **Due to its timing-dependent nature, successful exploitation is not guaranteed and may vary significantly depending on system resources, CPU scheduling, server load, and network conditions**.
 
 ## Exploit Reproduction Environment
 | Field             | Value                                                     |
