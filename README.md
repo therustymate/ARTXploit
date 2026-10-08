@@ -1,7 +1,7 @@
 # ARTXploit
 ARTEX v0.3.14 Pre-auth Remote Code Execution via TOCTOU Race Condition
 
-[![ARTXploit RCE Demonstration](https://img.youtube.com/vi/B8b5uQMeL4U/maxresdefault.jpg)](https://www.youtube.com/watch?v=B8b5uQMeL4U)
+<video src="./results/old_episodes/simulation.mp4" controls preload></video>
 
 Youtube: [@therustymate](https://www.youtube.com/watch?v=B8b5uQMeL4U)
 
