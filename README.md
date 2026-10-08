@@ -1,5 +1,5 @@
 # ARTXploit
-Exploit Development &amp; Research for Autumn-27/ARTEX
+ARTEX v0.3.14 Remote Code Execution via TOCTOU Race Condition
 
 ## Executive Summary
 By continuously sending requests to `/api/auth/status` until all PostgreSQL `max_connections` slots (100 sessions by default) are exhausted, `auth.go` in ARTEX v0.3.14 fails to establish a connection to the database. However, instead of treating the database connection failure as an error, the application incorrectly assumes that no password has been configured. It then accepts a new password and attempts to store it in the database, resulting in a TOCTOU (Time-of-Check to Time-of-Use) vulnerability.
