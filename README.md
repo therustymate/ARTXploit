@@ -22,6 +22,8 @@ This vulnerability was explicitly fixed in a subsequent commit. When ARTEX is bu
 | PostgreSQL        | psql (PostgreSQL) 18.6                                    |
 | npm               | 9.2.0                                                     |
 
+Detailed KVM setup in [`./ubuntu06_04_kvm.xml`](./ubuntu06_04_kvm.xml)
+
 ### Configuration
 ```json
 {
