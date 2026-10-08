@@ -3,6 +3,7 @@ Exploit Development &amp; Research for Autumn-27/ARTEX
 
 ## Executive Summary
 
+
 ## Exploit Reproduction Environment
 | Field             | Value                                                     |
 |:------------------|:----------------------------------------------------------|
@@ -30,11 +31,6 @@ Exploit Development &amp; Research for Autumn-27/ARTEX
     }
 }
 ```
-
-### API Key
-| Provider  | Expires       | API Key                                                   |
-|:----------|:--------------|:----------------------------------------------------------|
-| Groq      | 10/14/2026    | `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`|
 
 
 ### Post Installation
