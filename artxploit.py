@@ -1,3 +1,12 @@
+# Exploit Title: ARTXploit - ARTEX v0.3.14 Pre-Auth RCE via TOCTOU Race Condition
+# Date: 2026-10-08
+# Exploit Author: therustymate
+# Vendor Homepage: https://github.com/Autumn-27/ARTEX
+# Software Link: https://github.com/Autumn-27/ARTEX/releases/tag/v0.3.14
+# Version: 0.3.14
+# Tested on: Ubuntu Server 26.04.1 AMD64
+# CVE : N/A
+
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import as_completed
 from argparse import ArgumentParser
