@@ -96,10 +96,12 @@ def monitor_threads(request_amount: int):
                 latency_avg = statistics.mean(latencies) * 1000
                 latency_max = max(latencies) * 1000
 
-                failures = sum(not r["ok"] for r in results)
-                init_true = sum(r["initialized"] is True for r in results)
-                init_false = sum(r["initialized"] is False for r in results)
-                init_unknown = sum(r["initialized"] is None for r in results)
+                valid_results = [r for r in results if isinstance(r, dict)]
+
+                failures = sum(not r["ok"] for r in valid_results)
+                init_true = sum(r["initialized"] is True for r in valid_results)
+                init_false = sum(r["initialized"] is False for r in valid_results)
+                init_unknown = sum(r["initialized"] is None for r in valid_results)
             else:
                 latency_avg = latency_max = 0
                 failures = init_true = init_false = init_unknown = 0
