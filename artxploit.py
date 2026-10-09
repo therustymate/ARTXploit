@@ -13,7 +13,6 @@ from threading import Thread
 from threading import Event
 from threading import Lock
 from argparse import ArgumentParser
-from collections import Counter
 import requests
 import time
 import statistics
@@ -28,7 +27,6 @@ ENDPOINT_AUTH_INIT      = "/api/auth/init"
 ENDPOINT_AUTH_LOGIN     = "/api/auth/login"
 ENDPOINT_CMD_EXEC       = "/api/tools/custom/test"
 
-EXPLOIT_SUCCESS_TRIGGER = False
 POSSIBLE_EXPLOIT_SUCCESS_COUNTER = 0
 THREAD_WORKER_REQUEST_FAIL_COUNTER = 0
 
@@ -159,6 +157,7 @@ def interative(token: str, target: str, timeout: int):
 
             if is_error == True and rce_json.get("is_error", "") != "":
                 print(f"[-] Error: {output}")
+                continue
 
             if output != "":
                 print(output)
@@ -174,7 +173,6 @@ def main(args):
     global ENDPOINT_AUTH_INIT
     global ENDPOINT_AUTH_LOGIN
     global ENDPOINT_CMD_EXEC
-    global EXPLOIT_SUCCESS_TRIGGER
 
     target = str(args.target)
     if target.endswith("/"):
