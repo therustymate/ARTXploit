@@ -61,8 +61,25 @@ Detailed KVM setup in [`./ubuntu06_04_kvm.xml`](./ubuntu06_04_kvm.xml)
 * Release: [v0.3.14](https://github.com/Autumn-27/ARTEX/releases/tag/v0.3.14)
 
 ## Exploit Usage
+
+### Quick Usage
 ```bash
-python3 artxploit.py -t [TARGET] -p [NEW_PASSWORD] -c [C2_SERVER]
+python3 artxploit.py -t TARGET
+```
+
+### Options
+```bash
+python3 artxploit.py [-h] -t TARGET [-p PASSWORD] [--timeout TIMEOUT] [--concurrency CONCURRENCY] [-r REQUESTS]
+
+  -h, --help            show this help message and exit
+  -t, --target TARGET   ARTEX AI dashboard URL
+  -p, --password PASSWORD
+                        New password to set (default: artxploit_pwned)
+  --timeout TIMEOUT     Set request timeout (default: 50)
+  --concurrency CONCURRENCY
+                        Set concurrency for thread requests (default: 10,000)
+  -r, --requests REQUESTS
+                        Set request for thread requests (default 10,000)
 ```
 
 ## References
