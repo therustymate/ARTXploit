@@ -91,12 +91,11 @@ def monitor_threads(request_amount: int):
             completed = len(results)
 
             if completed:
-                latencies = [r["elapsed"] for r in results]
+                valid_results = [r for r in results if isinstance(r, dict)]
+                latencies = [r["elapsed"] for r in valid_results]
 
                 latency_avg = statistics.mean(latencies) * 1000
                 latency_max = max(latencies) * 1000
-
-                valid_results = [r for r in results if isinstance(r, dict)]
 
                 failures = sum(not r["ok"] for r in valid_results)
                 init_true = sum(r["initialized"] is True for r in valid_results)
