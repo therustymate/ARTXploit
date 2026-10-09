@@ -18,6 +18,28 @@ This vulnerability was explicitly fixed in a subsequent commit. When ARTEX is bu
 
 This exploit is highly sensitive to timing, client-side hardware performance, and target server performance. **Due to its timing-dependent nature, successful exploitation is not guaranteed and may vary significantly depending on system resources, CPU scheduling, server load, and network conditions**.
 
+## Exploit Usage
+
+### Quick Usage
+```bash
+python3 artxploit.py -t TARGET
+```
+
+### Options
+```bash
+python3 artxploit.py [-h] -t TARGET [-p PASSWORD] [--timeout TIMEOUT] [--concurrency CONCURRENCY] [-r REQUESTS]
+
+  -h, --help            show this help message and exit
+  -t, --target TARGET   ARTEX AI dashboard URL
+  -p, --password PASSWORD
+                        New password to set (default: artxploit_pwned)
+  --timeout TIMEOUT     Set request timeout (default: 50)
+  --concurrency CONCURRENCY
+                        Set concurrency for thread requests (default: 10,000)
+  -r, --requests REQUESTS
+                        Set request for thread requests (default 10,000)
+```
+
 ## Exploit Reproduction Environment
 | Field             | Value                                                     |
 |:------------------|:----------------------------------------------------------|
@@ -59,28 +81,6 @@ Detailed KVM setup in [`./ubuntu06_04_kvm.xml`](./ubuntu06_04_kvm.xml)
 
 * Commit: [b55ceb1fdd84a813d77de09a06af83d323a81f85](https://github.com/Autumn-27/ARTEX/tree/b55ceb1fdd84a813d77de09a06af83d323a81f85)
 * Release: [v0.3.14](https://github.com/Autumn-27/ARTEX/releases/tag/v0.3.14)
-
-## Exploit Usage
-
-### Quick Usage
-```bash
-python3 artxploit.py -t TARGET
-```
-
-### Options
-```bash
-python3 artxploit.py [-h] -t TARGET [-p PASSWORD] [--timeout TIMEOUT] [--concurrency CONCURRENCY] [-r REQUESTS]
-
-  -h, --help            show this help message and exit
-  -t, --target TARGET   ARTEX AI dashboard URL
-  -p, --password PASSWORD
-                        New password to set (default: artxploit_pwned)
-  --timeout TIMEOUT     Set request timeout (default: 50)
-  --concurrency CONCURRENCY
-                        Set concurrency for thread requests (default: 10,000)
-  -r, --requests REQUESTS
-                        Set request for thread requests (default 10,000)
-```
 
 ## References
 * [https://artex-demo.vercel.app/](https://artex-demo.vercel.app/)
