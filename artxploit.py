@@ -247,6 +247,8 @@ def main(args):
     t.start()
     try:
         pool = ThreadPoolExecutor(max_workers=concurrency)
+        if pool == None:
+            raise ReferenceError("pool is None.")
         futures = [
             pool.submit(race_worker, exploit_password, timeout)
             for _ in range(request_amount)
