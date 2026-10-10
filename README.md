@@ -18,6 +18,15 @@ This vulnerability was explicitly fixed in a subsequent commit. When ARTEX is bu
 
 This exploit is highly sensitive to timing, client-side hardware performance, and target server performance. **Due to its timing-dependent nature, successful exploitation is not guaranteed and may vary significantly depending on system resources, CPU scheduling, server load, and network conditions**.
 
+---
+
+**Correction:** TOCTOU is not the exact root cause of this vulnerability. The root cause is more accurately described as a Fail-Open issue in the authentication logic.
+
+When the application cannot establish a connection to the database, it incorrectly assumes that no administrator password has been set, allowing the password initialization process to be triggered again.
+
+TOCTOU is not entirely incorrect since the exploit relies on race conditions, but the actual root cause is the Fail-Open behavior.
+
+
 ## Exploit Usage
 
 ### Quick Usage
